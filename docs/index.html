@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="액체의 증발, 흡열·발열 반응, 시료 6종 pH 절사평균 — 측정 기록 3부">
+<title>액체의 증발 · 흡열/발열 · pH — 측정 기록</title>
+<style>
+:root {
+  color-scheme: light;
+  --plane:      #f9f9f7;
+  --surface:    #fcfcfb;
+  --ink:        #0b0b0b;
+  --ink-2:      #52514e;
+  --muted:      #898781;
+  --grid:       #e1e0d9;
+  --axis:       #c3c2b7;
+  --hair:       rgba(11,11,11,0.10);
+  --wash:       rgba(11,11,11,0.045);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --s4: #eda100; --s5: #e87ba4; --s6: #008300;
+  --sans: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --plane: #0d0d0d; --surface: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835;
+    --hair: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --s4: #c98500; --s5: #d55181; --s6: #008300;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --plane: #0d0d0d; --surface: #1a1a19;
+  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835;
+  --hair: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --s4: #c98500; --s5: #d55181; --s6: #008300;
+}
+
+body {
+  margin: 0;
+  background: var(--plane);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0.35rem 0 0;
+}
+h2 { font-size: 1.1875rem; font-weight: 600; letter-spacing: -0.01em; margin: 0.3rem 0 0; }
+h3 { font-size: 0.9375rem; font-weight: 600; margin: 0; }
+.masthead { border-bottom: 1px solid var(--hair); padding-bottom: 1.25rem; }
+.meta {
+  margin: 1rem 0 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.3rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.meta dt { color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6875rem; }
+.meta dd { margin: 0; overflow-wrap: anywhere; }
+
+.pager { display: flex; gap: 0; border-bottom: 1px solid var(--hair); overflow-x: auto; }
+.pager button {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0.6rem 0.95rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.pager button .no { font-family: var(--mono); font-size: 0.6875rem; }
+.pager button:hover { color: var(--ink-2); background: var(--wash); }
+.pager button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--s1); font-weight: 560; }
+.pager button:focus-visible { outline: 2px solid var(--s1); outline-offset: -2px; }
+[role="tabpanel"] { display: flex; flex-direction: column; gap: 1.25rem; }
+[role="tabpanel"][hidden] { display: none; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 3px;
+  padding: 1.25rem 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.card > header { display: flex; flex-direction: column; gap: 0.15rem; }
+.note { font-size: 0.8125rem; color: var(--ink-2); margin: 0.35rem 0 0; }
+.note b { font-weight: 600; color: var(--ink); }
+
+.deltas { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; margin: 0; padding: 0; list-style: none; }
+.deltas li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--hair);
+  border-radius: 2px;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.deltas .k { display: inline-block; width: 16px; height: 2px; border-radius: 1px; flex: none; }
+.deltas .name { font-family: var(--sans); font-size: 0.8125rem; font-weight: 550; color: var(--ink); }
+.deltas .id { color: var(--muted); font-size: 0.6875rem; }
+.deltas b { font-weight: 620; font-size: 0.875rem; color: var(--ink); font-variant-numeric: tabular-nums; margin-left: 0.1rem; }
+
+figure { margin: 0; position: relative; }
+svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+svg:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
+.tip {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  min-width: 11.5rem;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  border-radius: 3px;
+  padding: 0.5rem 0.6rem;
+  opacity: 0;
+  transition: opacity 90ms linear;
+}
+.tip[data-on="1"] { opacity: 1; }
+.tip .t { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.35rem; }
+.tip .row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; }
+.tip .row + .row { margin-top: 0.2rem; }
+.tip .k { display: inline-block; width: 14px; height: 2px; border-radius: 1px; flex: none; }
+.tip .n { color: var(--ink-2); }
+.tip .id { color: var(--muted); font-family: var(--mono); font-size: 0.6875rem; }
+.tip .v { margin-left: auto; font-family: var(--mono); font-weight: 620; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+details { border-top: 1px solid var(--hair); padding-top: 0.75rem; }
+summary { cursor: pointer; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--ink-2); }
+summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
+.tbl { max-height: 22rem; overflow: auto; margin-top: 0.75rem; border: 1px solid var(--hair); }
+.tbl--flat { max-height: none; }
+table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 0.3rem 0.6rem; text-align: right; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--axis); text-align: right; }
+thead th:first-child { text-align: left; }
+tbody tr + tr > * { border-top: 1px solid var(--grid); }
+td { color: var(--ink-2); }
+td.strong, th.strong { color: var(--ink); font-weight: 620; }
+.swatch { display: inline-block; width: 14px; height: 2px; border-radius: 1px; margin-right: 0.45rem; vertical-align: middle; }
+.name-cell { font-family: var(--sans); color: var(--ink); }
+
+footer { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+@media (prefers-reduced-motion: reduce) { .tip { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div class="eyebrow">측정 기록 · 3부</div>
+    <h1>액체의 증발, 흡열·발열 반응, 그리고 pH</h1>
+    <dl class="meta">
+      <dt>실험 1·2</dt><dd>온도 3채널 D16 · D18 · D20 · 약 1 Hz · 2분 (D18은 양쪽 다 물)</dd>
+      <dt>실험 3</dt><dd>pH 1채널 A0 · 시료 6종 · 초당 2~3회 · 각 28~34초</dd>
+    </dl>
+  </div>
+
+  <div class="pager" role="tablist" aria-label="실험 페이지">
+    <button role="tab" id="tab-1" aria-controls="page-1" aria-selected="true"><span class="no">01</span>액체의 증발</button>
+    <button role="tab" id="tab-2" aria-controls="page-2" aria-selected="false" tabindex="-1"><span class="no">02</span>흡열·발열 반응</button>
+    <button role="tab" id="tab-3" aria-controls="page-3" aria-selected="false" tabindex="-1"><span class="no">03</span>pH 분석</button>
+  </div>
+
+  <div role="tabpanel" id="page-1" aria-labelledby="tab-1">
+    <section class="card">
+      <header>
+        <div class="eyebrow">실험 1</div>
+        <h2>액체의 증발</h2>
+        <p class="note">대조군인 물과 아세톤 · 에탄올을 같은 조건에 두고 2분 동안 온도를 잰다. 세 채널 모두 26 °C 부근에서 출발하지만, 증발이 빠를수록 크게 식는다 — 아세톤, 에탄올, 물 순. 아세톤은 기록이 끝나는 2:09까지도 계속 내려가는 중이라 최저점은 그래프 바깥에 있다.</p>
+      </header>
+      <ul class="deltas" id="d-evap"></ul>
+      <figure>
+        <svg id="svg-evap" role="img" aria-label="액체의 증발 — 물(D18, 대조군)·아세톤(D16)·에탄올(D20)의 시간에 따른 온도 변화 꺾은선그래프"></svg>
+        <div class="tip" id="tip-evap" role="status"></div>
+      </figure>
+      <details>
+        <summary>표로 보기 — 115행</summary>
+        <div class="tbl"><table id="t-evap"></table></div>
+      </details>
+    </section>
+  </div>
+
+  <div role="tabpanel" id="page-2" aria-labelledby="tab-2" hidden>
+    <section class="card">
+      <header>
+        <div class="eyebrow">실험 2</div>
+        <h2>흡열 반응과 발열 반응</h2>
+        <p class="note">대조군인 물은 114행 전부 26.0 °C로, 값이 한 번도 바뀌지 않는다. 염화칼슘 쪽은 열이 나 1:25에 37.88 °C로 정점을 찍고 이후 완만히 식는다 — 0:36에서 0:41 사이 한 번 눌렸다가 다시 오른다. 질산암모늄 쪽은 열을 빼앗겨 1:13에 20.19 °C까지 내려간 뒤 조금 되올라온다.</p>
+      </header>
+      <ul class="deltas" id="d-rxn"></ul>
+      <figure>
+        <svg id="svg-rxn" role="img" aria-label="흡열·발열 반응 — 물(D18, 대조군)·염화칼슘(D16)·질산암모늄(D20)의 시간에 따른 온도 변화 꺾은선그래프"></svg>
+        <div class="tip" id="tip-rxn" role="status"></div>
+      </figure>
+      <details>
+        <summary>표로 보기 — 114행</summary>
+        <div class="tbl"><table id="t-rxn"></table></div>
+      </details>
+    </section>
+  </div>
+
+  <div role="tabpanel" id="page-3" aria-labelledby="tab-3" hidden>
+    <section class="card">
+      <header>
+        <div class="eyebrow">실험 3 · 절사평균</div>
+        <h2>시료 6종의 pH</h2>
+        <p class="note">전극을 담근 직후에는 값이 크게 출렁이다가 차차 자리를 잡는다. 그 앞뒤 튀는 구간을 빼기 위해 <b>정렬한 측정값의 양 끝에서 각각 10%씩 버리고 남은 80%로 평균</b>을 낸 값이 절사평균이다. 아래 점이 절사평균, 가로선이 그 시료에서 관측된 최소–최대 범위다. 대조군인 물이 맨 위, 나머지는 pH가 낮은 순이다.</p>
+      </header>
+      <figure>
+        <svg id="svg-ph-dot" role="img" aria-label="시료 6종의 pH 절사평균 점그래프 — 대조군 물이 첫 행, 최소부터 최대까지 범위와 함께 표시"></svg>
+        <div class="tip" id="tip-ph-dot" role="status"></div>
+      </figure>
+      <div class="tbl tbl--flat"><table id="t-ph-stat"></table></div>
+    </section>
+
+    <section class="card">
+      <header>
+        <h3>측정 원값 — 시간에 따른 pH</h3>
+        <p class="note">절사평균이 왜 필요한지가 여기서 보인다. 레몬즙 · 오렌지주스 · 물은 첫 몇 초 동안만 값이 크게 흔들리고, 포카리스웨트 · 탄산수소나트륨은 처음부터 평평하다. 세제는 28초 내내 한 방향으로 계속 올라가 아직 자리를 잡지 못했다.</p>
+      </header>
+      <ul class="deltas" id="d-ph"></ul>
+      <figure>
+        <svg id="svg-ph" role="img" aria-label="시료 6종의 시간에 따른 pH 변화 꺾은선그래프"></svg>
+        <div class="tip" id="tip-ph" role="status"></div>
+      </figure>
+      <details>
+        <summary>표로 보기 — 시료별 전체 측정값</summary>
+        <div class="tbl"><table id="t-ph"></table></div>
+      </details>
+    </section>
+  </div>
+
+  <footer>그래프 위에서 좌우로 움직이면 그 시각의 값을 함께 읽는다. 키보드는 Tab으로 들어가 ←/→.</footer>
+</div>
+
+<script>
+const EVAP = [[2,26.625,26,26.4375],[3,26.625,26,26.5],[4,26.625,26.0625,26.4375],[5,26.5625,26,26.4375],[6,26.5625,26,26.4375],[7,26.5625,26,26.4375],[8,26.5,26,26.375],[9,26.5,26,26.375],[10,26.375,26,26.3125],[11,26.375,26,26.3125],[13,26.25,25.9375,26.25],[14,26.125,25.9375,26.25],[15,26.125,25.9375,26.1875],[16,26,25.9375,26.1875],[17,25.875,25.9375,26.125],[18,25.75,25.9375,26.0625],[20,25.625,25.875,26],[21,25.5625,25.875,26],[22,25.375,25.875,25.9375],[23,25.3125,25.875,25.9375],[24,25.125,25.875,25.875],[25,25,25.875,25.8125],[26,24.875,25.875,25.8125],[27,24.75,25.8125,25.75],[28,24.625,25.8125,25.6875],[30,24.4375,25.8125,25.6875],[31,24.3125,25.8125,25.6875],[32,24.125,25.8125,25.625],[33,24,25.8125,25.5625],[34,23.8125,25.8125,25.5],[35,23.625,25.8125,25.4375],[36,23.4375,25.75,25.4375],[37,23.3125,25.75,25.375],[38,23.0625,25.75,25.3125],[39,22.875,25.75,25.3125],[41,22.6875,25.75,25.25],[42,22.5,25.75,25.25],[43,22.25,25.75,25.1875],[44,22.125,25.6875,25.125],[45,21.9375,25.6875,25.0625],[46,21.75,25.6875,25.0625],[47,21.5,25.6875,25],[48,21.375,25.6875,25],[49,21.125,25.6875,24.9375],[51,21,25.6875,24.875],[52,20.75,25.6875,24.8125],[53,20.625,25.6875,24.8125],[54,20.4375,25.6875,24.75],[55,20.25,25.625,24.75],[56,20.0625,25.6875,24.6875],[57,19.8125,25.625,24.625],[58,19.6875,25.625,24.5625],[59,19.5,25.6875,24.5625],[60,19.3125,25.625,24.5625],[62,19.125,25.625,24.5],[63,18.9375,25.625,24.5],[64,18.75,25.625,24.4375],[65,18.625,25.625,24.375],[66,18.4375,25.625,24.3125],[67,18.25,25.5625,24.3125],[68,18.125,25.625,24.25],[69,17.9375,25.5625,24.1875],[71,17.8125,25.625,24.1875],[72,17.625,25.5625,24.125],[73,17.4375,25.5625,24.0625],[74,17.3125,25.5625,24.0625],[75,17.1875,25.5625,24],[76,17,25.5625,24],[77,16.8125,25.5,23.9375],[78,16.6875,25.5,23.875],[80,16.5,25.5,23.875],[81,16.375,25.5,23.875],[82,16.25,25.5,23.8125],[83,16.125,25.5,23.75],[84,15.9375,25.5,23.6875],[85,15.8125,25.5,23.6875],[86,15.6875,25.4375,23.6875],[87,15.625,25.4375,23.625],[88,15.4375,25.4375,23.625],[90,15.3125,25.4375,23.5625],[91,15.125,25.4375,23.5],[92,15.0625,25.4375,23.5],[93,14.9375,25.4375,23.5],[94,14.8125,25.4375,23.4375],[95,14.625,25.375,23.375],[96,14.5625,25.375,23.375],[98,14.4375,25.4375,23.375],[99,14.3125,25.375,23.3125],[100,14.1875,25.375,23.3125],[101,14.0625,25.375,23.3125],[102,13.9375,25.375,23.25],[103,13.875,25.375,23.25],[104,13.75,25.375,23.1875],[105,13.625,25.375,23.1875],[107,13.5,25.375,23.125],[108,13.375,25.375,23.0625],[109,13.3125,25.375,23.0625],[110,13.125,25.375,23],[111,13.0625,25.3125,23],[112,12.9375,25.3125,22.9375],[114,12.875,25.3125,22.9375],[115,12.75,25.3125,22.875],[116,12.6875,25.3125,22.8125],[117,12.5625,25.3125,22.8125],[118,12.5,25.3125,22.75],[119,12.375,25.3125,22.75],[120,12.25,25.3125,22.75],[121,12.1875,25.25,22.625],[123,12.125,25.25,22.625],[124,12.0625,25.25,22.5625],[125,11.875,25.25,22.5625],[126,11.875,25.25,22.5],[127,11.75,25.25,22.5],[128,11.6875,25.25,22.4375],[129,11.5625,25.25,22.4375]];
+const RXN  = [[2,25.5625,26,26.125],[3,25.5625,26,26.125],[4,25.5625,26,26.125],[5,25.5625,26,26.125],[6,25.5625,26,26.125],[7,25.5,26,26.125],[8,25.5625,26,26.125],[9,25.5625,26,26.1875],[10,25.5625,26,26.125],[11,25.5625,26,26.125],[13,25.5625,26,26.125],[14,25.5625,26,26.0625],[15,25.5625,26,26],[16,25.5625,26,25.875],[17,25.6875,26,25.625],[18,25.9375,26,25.3125],[19,26.25,26,25],[21,26.6875,26,24.625],[22,27.125,26,24.3125],[23,27.75,26,24],[24,28.375,26,23.6875],[25,28.9375,26,23.4375],[26,29.5,26,23.25],[27,30,26,23.0625],[28,30.5,26,22.9375],[29,31,26,22.8125],[31,31.4375,26,22.6875],[32,31.875,26,22.625],[33,32.25,26,22.5],[34,32.5,26,22.4375],[35,33,26,22.375],[36,33.125,26,22.25],[37,33,26,22.0625],[38,32.8125,26,21.8125],[39,32.75,26,21.6875],[41,32.6875,26,21.5625],[42,32.75,26,21.375],[43,32.9375,26,21.25],[44,33.125,26,21.125],[45,33.3125,26,21],[46,33.5625,26,20.875],[47,33.75,26,20.8125],[48,34.0625,26,20.75],[49,34.25,26,20.6875],[51,34.5625,26,20.6875],[52,34.8125,26,20.625],[53,35.0625,26,20.5625],[54,35.25,26,20.5625],[55,35.5,26,20.5],[56,35.6875,26,20.5],[57,35.875,26,20.4375],[58,36.0625,26,20.4375],[60,36.25,26,20.375],[61,36.4375,26,20.375],[62,36.5625,26,20.375],[63,36.75,26,20.3125],[64,36.8125,26,20.3125],[65,36.9375,26,20.25],[66,37.0625,26,20.3125],[67,37.1875,26,20.25],[69,37.25,26,20.25],[70,37.375,26,20.25],[71,37.4375,26,20.25],[72,37.5,26,20.25],[73,37.5625,26,20.1875],[74,37.625,26,20.1875],[75,37.6875,26,20.25],[76,37.6875,26,20.25],[78,37.75,26,20.25],[79,37.8125,26,20.25],[80,37.8125,26,20.25],[81,37.8125,26,20.25],[82,37.8125,26,20.25],[83,37.8125,26,20.25],[84,37.8125,26,20.25],[85,37.875,26,20.25],[87,37.875,26,20.25],[88,37.875,26,20.25],[89,37.875,26,20.25],[90,37.875,26,20.25],[91,37.875,26,20.25],[92,37.875,26,20.25],[93,37.875,26,20.25],[94,37.875,26,20.3125],[96,37.8125,26,20.25],[97,37.875,26,20.3125],[98,37.8125,26,20.3125],[99,37.8125,26,20.3125],[100,37.8125,26,20.3125],[101,37.8125,26,20.3125],[103,37.8125,26,20.3125],[104,37.75,26,20.3125],[105,37.75,26,20.375],[106,37.75,26,20.375],[107,37.6875,26,20.375],[108,37.6875,26,20.375],[109,37.625,26,20.375],[111,37.625,26,20.375],[112,37.5625,26,20.4375],[113,37.5625,26,20.4375],[114,37.5625,26,20.4375],[115,37.5625,26,20.4375],[116,37.5,26,20.4375],[117,37.5,26,20.4375],[119,37.5,26,20.5],[120,37.4375,26,20.5],[121,37.4375,26,20.5],[122,37.4375,26,20.5],[123,37.4375,26,20.5],[124,37.375,26,20.5],[126,37.375,26,20.5],[127,37.3125,26,20.5625],[128,37.3125,26,20.5625],[130,37.25,26,20.5]];
+const PH   = [[[1,8.204559],[1,8.201469],[2,8.1875732],[2,8.173672],[2,8.158226],[3,8.164406],[3,8.165951],[4,8.133518],[4,8.121166],[4,8.127342],[5,8.116531],[5,8.102631],[5,8.1057208],[6,8.091824],[6,8.074833],[7,8.064026],[7,8.071743],[7,8.067108],[8,8.059391],[8,8.057842],[9,8.047035],[9,8.043949],[9,8.033142],[10,8.039314],[10,8.030048],[11,8.020782],[11,8.0177],[11,8.017693],[12,8.009972],[12,8.01152],[13,8.003796],[13,7.98835],[13,7.985264],[14,7.992985],[14,7.969822],[15,7.972912],[15,7.972912],[16,7.965191],[16,7.959011],[16,7.969822],[17,7.952835],[17,7.949745],[18,7.940483],[18,7.9389304],[19,7.9343032],[19,7.92349236],[19,7.9265824],[20,7.92967232],[20,7.9173128],[21,7.92349236],[21,7.90959168],[22,7.9049608],[22,7.9003292],[22,7.9111368],[23,7.8926088],[23,7.90187068],[24,7.892605],[24,7.887974],[25,7.8818016],[25,7.870983],[26,7.88334268],[26,7.87099068],[26,7.86018],[27,7.861721],[27,7.852455],[28,7.85709],[28,7.860176],[29,7.843193],[29,7.83701332],[29,7.84318932],[30,7.83391936],[30,7.8370092],[31,7.8370092],[31,7.8323784],[32,7.82156736],[32,7.8184776],[33,7.82311236],[33,7.80921536],[33,7.8200264],[34,7.8138468],[34,7.8061256]],[[1,2.3991432],[1,2.3311882],[2,2.335823],[2,2.332737],[2,2.3420028],[3,2.3080292],[3,2.3126564],[4,2.2941246],[4,2.2879524],[4,2.2817726],[5,2.2817764],[5,2.2709656],[6,2.2616958],[6,2.2431716],[6,2.2555236],[7,2.2539788],[7,2.24934],[7,2.253975],[8,2.233902],[8,2.2261734],[9,2.236992],[9,2.220005],[9,2.2153702],[10,2.2122764],[10,2.2091866],[11,2.1952896],[11,2.1844788],[11,2.1906662],[12,2.1875724],[12,2.1891174],[13,2.1813926],[13,2.1937484],[14,2.1752166],[14,2.1721306],[14,2.172123],[15,2.1628608],[15,2.1644058],[16,2.1520538],[16,2.1597748],[17,2.1535988],[17,2.1520538],[18,2.142784],[18,2.15205],[18,2.1335182],[19,2.1412392],[19,2.1350632],[20,2.1412392],[20,2.1304322],[21,2.1273422],[21,2.1257972],[21,2.12117],[22,2.107273],[22,2.1319732],[23,2.1057206],[23,2.1103554],[24,2.1057206],[24,2.0979996],[24,2.1165238],[25,2.1041718],[25,2.0964546],[26,2.0871926],[26,2.0794716],[27,2.0918236],[27,2.0933686],[27,2.0933648],[28,2.0841026],[28,2.0918236],[29,2.0779228],[29,2.0902786],[30,2.0779228],[30,2.0887298],[31,2.0918274],[31,2.1010894],[31,2.12117],[32,2.1119004],[32,2.12426],[33,2.107273]],[[1,3.4486884],[1,3.46566768],[2,3.4687576],[2,3.4718476],[2,3.4764862],[3,3.4718514],[3,3.4641228],[4,3.4826622],[4,3.4703064],[4,3.4718476],[5,3.4672164],[5,3.4872932],[5,3.4594956],[6,3.4733924],[6,3.4672164],[7,3.4625854],[7,3.4718476],[7,3.4564094],[8,3.4625854],[8,3.470314],[9,3.4703064],[9,3.4749374],[9,3.4749374],[10,3.4811096],[10,3.4672164],[11,3.4687614],[11,3.4780274],[11,3.4841996],[12,3.479576],[12,3.4842034],[13,3.4656754],[13,3.493473],[14,3.4687576],[14,3.4934692],[14,3.4795684],[15,3.4826546],[15,3.4811172],[16,3.50119016],[16,3.4903794],[17,3.4934692],[17,3.4749374],[17,3.4872932],[18,3.49501416],[18,3.4795724],[19,3.4764824],[19,3.4842034],[20,3.482666],[20,3.498104],[21,3.4903832],[21,3.4965592],[21,3.4811172],[22,3.493473],[22,3.4780274],[23,3.4903832],[23,3.4857444],[24,3.493473],[24,3.4888344],[25,3.4903832],[25,3.493473],[25,3.50119016],[26,3.50119768],[26,3.496563],[27,3.496563],[27,3.5027352],[28,3.499649],[28,3.498104],[28,3.4996528],[29,3.493473]],[[1,4.1760484],[1,3.7837982],[1,3.67569732],[2,3.63091636],[2,3.595398],[3,3.57686632],[3,3.5660552],[3,3.5706864],[4,3.5459748],[4,3.5367088],[5,3.5444336],[5,3.53825368],[5,3.54288868],[6,3.5428848],[6,3.5382576],[7,3.52745068],[7,3.52590168],[7,3.53053668],[8,3.5413476],[8,3.5289916],[9,3.52590168],[9,3.5413476],[9,3.505825],[10,3.521267],[10,3.5120048],[11,3.4872932],[11,3.516636],[11,3.516636],[12,3.5089112],[12,3.5058212],[13,3.51046],[13,3.50427616],[14,3.5058288],[14,3.5027352],[14,3.5120048],[15,3.493473],[15,3.508915],[16,3.491928],[16,3.50428],[16,3.4903832],[17,3.4919244],[17,3.4888344],[18,3.4903832],[18,3.4919244],[19,3.4903832],[19,3.4857484],[20,3.4811172],[20,3.4811172],[20,3.4842034],[21,3.4764824],[21,3.4656754],[22,3.4780274],[22,3.4703026],[23,3.4533196],[23,3.4641342],[23,3.4656754],[24,3.4733924],[24,3.45331568],[25,3.4548644],[25,3.4594994],[26,3.45331568],[26,3.45331568],[27,3.45640184],[27,3.4425088],[27,3.4440536],[28,3.4564094],[28,3.4440536],[29,3.4548644],[29,3.4317016],[30,3.433239],[30,3.4378776],[30,3.433239],[31,3.4301568],[31,3.4394188],[32,3.44096368],[32,3.4301568]],[[1,6.4708824],[1,6.5331384],[2,6.603115],[2,6.6448096],[3,6.69886],[3,6.732834],[3,6.76990136],[4,6.803875],[4,6.8332176],[5,6.8532948],[5,6.876457],[5,6.894989],[6,6.9212416],[6,6.94440836],[6,6.9598468],[7,6.981468],[7,6.995365],[8,7.007725],[8,7.0277976],[8,7.030884],[9,7.06331636],[9,7.074127],[10,7.075672],[10,7.105011],[10,7.117367],[11,7.1142808],[11,7.1250876],[12,7.1389848],[12,7.1559752],[13,7.1636963],[13,7.182228],[13,7.182228],[14,7.197674],[14,7.200756],[15,7.2208368],[15,7.214657],[16,7.2270132],[16,7.2440032],[16,7.2424584],[17,7.2548104],[17,7.2532652],[18,7.2594416],[18,7.2548068],[19,7.277977],[19,7.274887],[19,7.302681],[20,7.29959868],[20,7.305771],[21,7.3150408],[21,7.3165852],[22,7.3320268],[22,7.3289376],[22,7.3304824],[23,7.3397448],[23,7.3490148],[24,7.35364536],[24,7.3613668],[25,7.3551864],[25,7.362911],[26,7.3737144],[26,7.372177],[26,7.378353],[27,7.375267],[27,7.379898],[28,7.389164],[28,7.4076996]],[[1,8.558201],[1,8.652401],[2,8.7033616],[2,8.709541],[2,8.717266],[3,8.707996],[3,8.717266],[3,8.700275],[4,8.70182],[4,8.69873],[5,8.714176],[5,8.689465],[5,8.695644],[6,8.683285],[6,8.70491],[7,8.6740264],[7,8.68792],[7,8.6863784],[8,8.680195],[8,8.70182],[9,8.689465],[9,8.684834],[9,8.678654],[10,8.669392],[10,8.670933],[11,8.670933],[11,8.675564],[11,8.674023],[12,8.664761],[12,8.675564],[13,8.674023],[13,8.674023],[14,8.660126],[14,8.655495],[14,8.667843],[15,8.658581],[15,8.660126],[16,8.661671],[16,8.652405],[16,8.669392],[17,8.649315],[17,8.655491],[18,8.653946],[18,8.65395],[19,8.650856],[19,8.646229],[19,8.643135],[20,8.647774],[20,8.652405],[21,8.643135],[21,8.652401],[22,8.663216],[22,8.635414],[22,8.653946],[23,8.627693],[23,8.644684],[24,8.638504],[24,8.657036],[25,8.649315],[25,8.632324],[25,8.627697],[26,8.636963],[26,8.623066],[27,8.643135],[27,8.640053],[28,8.632332],[28,8.643135],[29,8.627693],[29,8.629242]]];
+
+const NS = "http://www.w3.org/2000/svg";
+const CONTROL = "물";  // 대조군 — 어느 표에서도 맨 앞
+const PH_NAMES = [CONTROL, "레몬즙", "포카리스웨트", "오렌지주스", "세제", "탄산수소나트륨"];
+
+const mmss = t => Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+const secs = t => t + "s";
+const trimNum = v => {
+  let s = v.toFixed(4);
+  if (s.indexOf(".") >= 0) s = s.replace(/0+$/, "").replace(/\.$/, "");
+  return s;
+};
+const el = (tag, attrs) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+};
+const span = (cls, text) => {
+  const n = document.createElement("span");
+  if (cls) n.className = cls;
+  n.textContent = text;
+  return n;
+};
+
+// [t, v1, v2, v3] 행 묶음을 계열별 점 배열로 편다
+function fromRows(rows, defs) {
+  return defs.map(d => Object.assign({}, d, { pts: rows.map(r => [r[0], r[d.i]]) }));
+}
+
+const D_EVAP = [
+  { i: 2, id: "D18", name: CONTROL, css: "--s1", control: true },
+  { i: 1, id: "D16", name: "아세톤", css: "--s2" },
+  { i: 3, id: "D20", name: "에탄올", css: "--s3" }
+];
+const D_RXN = [
+  { i: 2, id: "D18", name: CONTROL, css: "--s1", control: true },
+  { i: 1, id: "D16", name: "염화칼슘", css: "--s2" },
+  { i: 3, id: "D20", name: "질산암모늄", css: "--s3" }
+];
+const S_EVAP = fromRows(EVAP, D_EVAP);
+const S_RXN = fromRows(RXN, D_RXN);
+const S_PH = PH.map((pts, k) => ({
+  id: "A0", name: PH_NAMES[k], css: "--s" + (k + 1), control: PH_NAMES[k] === CONTROL, pts
+}));
+
+// 정렬한 값의 양 끝에서 각각 p씩 버린 평균
+function trimmedMean(values, p) {
+  const s = values.slice().sort((a, b) => a - b);
+  const cut = Math.floor(s.length * p);
+  const keep = s.length - 2 * cut > 0 ? s.slice(cut, s.length - cut) : s;
+  return { mean: keep.reduce((a, b) => a + b, 0) / keep.length, cut, kept: keep.length };
+}
+function median(values) {
+  const s = values.slice().sort((a, b) => a - b);
+  const h = s.length >> 1;
+  return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+}
+const PH_STAT = S_PH.map(s => {
+  const v = s.pts.map(p => p[1]);
+  const t = trimmedMean(v, 0.10);
+  return {
+    s,
+    n: v.length,
+    trim: t.mean,
+    cut: t.cut,
+    kept: t.kept,
+    mean: v.reduce((a, b) => a + b, 0) / v.length,
+    med: median(v),
+    lo: Math.min.apply(null, v),
+    hi: Math.max.apply(null, v),
+    span: s.pts[s.pts.length - 1][0] - s.pts[0][0]
+  };
+}).sort((a, b) => (a.s.control ? 0 : 1) - (b.s.control ? 0 : 1) || a.trim - b.trim);
+
+function scale(series, key, padFrac) {
+  let lo = Infinity, hi = -Infinity;
+  for (const s of series) for (const p of s.pts) { if (p[key] < lo) lo = p[key]; if (p[key] > hi) hi = p[key]; }
+  return niceAxis(lo, hi, padFrac);
+}
+function niceAxis(lo, hi, padFrac) {
+  const pad = (hi - lo) * padFrac || 1;
+  const d0 = lo - pad, d1 = hi + pad;
+  let step = 0.1;
+  for (const c of [0.1, 0.2, 0.25, 0.5, 1, 2, 2.5, 5, 10, 20, 50]) {
+    step = c;
+    if (Math.floor(d1 / c) - Math.ceil(d0 / c) + 1 <= 7) break;
+  }
+  const ticks = [];
+  for (let v = Math.ceil(d0 / step) * step; v <= d1 + 1e-9; v = Number((v + step).toFixed(6))) ticks.push(Number(v.toFixed(6)));
+  return { lo: d0, hi: d1, ticks };
+}
+
+class LineChart {
+  constructor(svgId, tipId, series, opts) {
+    this.svg = document.getElementById(svgId);
+    this.tip = document.getElementById(tipId);
+    this.series = series;
+    this.o = Object.assign({ xFmt: mmss, unit: "", endDigits: 1, tipDigits: 4 }, opts);
+    this.y = scale(series, 1, 0.08);
+    let t0 = Infinity, t1 = -Infinity;
+    for (const s of series) { t0 = Math.min(t0, s.pts[0][0]); t1 = Math.max(t1, s.pts[s.pts.length - 1][0]); }
+    this.t0 = t0; this.t1 = t1;
+    this.idx = -1;
+    this.svg.setAttribute("tabindex", "0");
+
+    const move = ev => {
+      const r = this.svg.getBoundingClientRect();
+      if (!r.width) return;
+      this.showAt(this.t0 + ((ev.clientX - r.left) * (this.w / r.width) - this.m.l) / this.pw * (this.t1 - this.t0));
+    };
+    this.svg.addEventListener("pointermove", move);
+    this.svg.addEventListener("pointerdown", move);
+    this.svg.addEventListener("pointerleave", () => this.hide());
+    this.svg.addEventListener("blur", () => this.hide());
+    this.svg.addEventListener("keydown", ev => {
+      let d = 0;
+      if (ev.key === "ArrowRight") d = 1;
+      else if (ev.key === "ArrowLeft") d = -1;
+      else if (ev.key === "Escape") { this.hide(); return; }
+      else return;
+      ev.preventDefault();
+      const anchor = this.series[0].pts;
+      const start = this.idx < 0 ? (d > 0 ? -1 : anchor.length) : this.idx;
+      const i = Math.max(0, Math.min(anchor.length - 1, start + d));
+      this.idx = i;
+      this.showAt(anchor[i][0]);
+    });
+
+    new ResizeObserver(() => this.render()).observe(this.svg.parentNode);
+    this.render();
+  }
+
+  render() {
+    const box = this.svg.parentNode.getBoundingClientRect();
+    if (!box.width) return;
+    const w = Math.round(box.width);
+    if (w === this.w) return;
+    const narrow = w < 560;
+    const h = narrow ? 260 : 340;
+    const m = { l: narrow ? 34 : 42, r: narrow ? 46 : 60, t: 14, b: 30 };
+    Object.assign(this, { w, h, m, pw: w - m.l - m.r, ph: h - m.t - m.b, narrow });
+
+    this.svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    this.svg.setAttribute("width", w);
+    this.svg.setAttribute("height", h);
+    this.svg.replaceChildren();
+
+    const X = t => m.l + (t - this.t0) / (this.t1 - this.t0) * this.pw;
+    const Y = v => m.t + (this.y.hi - v) / (this.y.hi - this.y.lo) * this.ph;
+    this.X = X; this.Y = Y;
+    const fs = narrow ? 10 : 11;
+    const tickCss = "font-family:var(--mono);font-size:" + fs + "px;fill:var(--muted)";
+
+    for (const v of this.y.ticks) {
+      this.svg.appendChild(el("line", { x1: m.l, x2: m.l + this.pw, y1: Y(v), y2: Y(v), stroke: "var(--grid)", "stroke-width": 1, "shape-rendering": "crispEdges" }));
+      const tx = el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", style: tickCss });
+      tx.textContent = trimNum(v);
+      this.svg.appendChild(tx);
+    }
+    if (this.o.unit) {
+      const u = el("text", { x: m.l - 8, y: m.t - 3, "text-anchor": "end", style: tickCss });
+      u.textContent = this.o.unit;
+      this.svg.appendChild(u);
+    }
+
+    this.svg.appendChild(el("line", { x1: m.l, x2: m.l + this.pw, y1: m.t + this.ph, y2: m.t + this.ph, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" }));
+    const xStep = this.o.xStep || 30;
+    for (let t = 0; t <= this.t1; t += xStep) {
+      if (t < this.t0) continue;
+      this.svg.appendChild(el("line", { x1: X(t), x2: X(t), y1: m.t + this.ph, y2: m.t + this.ph + 4, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" }));
+      const tx = el("text", { x: X(t), y: m.t + this.ph + 18, "text-anchor": "middle", style: tickCss });
+      tx.textContent = this.o.xFmt(t);
+      this.svg.appendChild(tx);
+    }
+
+    for (const s of this.series) {
+      let d = "";
+      for (let i = 0; i < s.pts.length; i++) d += (i ? "L" : "M") + X(s.pts[i][0]).toFixed(2) + " " + Y(s.pts[i][1]).toFixed(2);
+      this.svg.appendChild(el("path", { d, fill: "none", stroke: "var(" + s.css + ")", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    }
+
+    // 끝점 직접 라벨 — 겹치면 위아래로 밀어 붙인다
+    const ends = this.series.map(s => {
+      const p = s.pts[s.pts.length - 1];
+      return { s, x: X(p[0]), y: Y(p[1]), v: p[1] };
+    }).sort((a, b) => a.y - b.y);
+    const gap = fs + 3;
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < gap) ends[i].y = ends[i - 1].y + gap;
+    for (const e of ends) {
+      this.svg.appendChild(el("circle", { cx: e.x, cy: Y(e.v), r: 4.5, fill: "var(" + e.s.css + ")", stroke: "var(--surface)", "stroke-width": 2 }));
+      const lb = el("text", { x: e.x + 9, y: e.y + 4, style: "font-family:var(--mono);font-size:" + fs + "px;font-weight:620;fill:var(--ink)" });
+      lb.textContent = e.v.toFixed(this.o.endDigits);
+      this.svg.appendChild(lb);
+    }
+
+    this.cross = el("g", { opacity: 0 });
+    this.cline = el("line", { y1: m.t, y2: m.t + this.ph, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" });
+    this.cross.appendChild(this.cline);
+    this.cdots = this.series.map(s => {
+      const c = el("circle", { r: 4.5, fill: "var(" + s.css + ")", stroke: "var(--surface)", "stroke-width": 2 });
+      this.cross.appendChild(c);
+      return c;
+    });
+    this.svg.appendChild(this.cross);
+    this.svg.appendChild(el("rect", { x: m.l, y: m.t, width: this.pw, height: this.ph, fill: "transparent" }));
+
+    if (this.at != null) this.showAt(this.at);
+  }
+
+  showAt(t) {
+    if (!this.X) return;
+    this.at = t;
+    let snapped = null;
+    const hits = this.series.map(s => {
+      let best = s.pts[0], bd = Infinity;
+      for (const p of s.pts) {
+        const d = Math.abs(p[0] - t);
+        if (d < bd) { bd = d; best = p; }
+      }
+      if (snapped === null || Math.abs(best[0] - t) < Math.abs(snapped - t)) snapped = best[0];
+      return best;
+    });
+    const x = this.X(snapped);
+    this.cline.setAttribute("x1", x);
+    this.cline.setAttribute("x2", x);
+    hits.forEach((p, k) => {
+      this.cdots[k].setAttribute("cx", this.X(p[0]));
+      this.cdots[k].setAttribute("cy", this.Y(p[1]));
+    });
+    this.cross.setAttribute("opacity", 1);
+
+    this.tip.replaceChildren();
+    const head = document.createElement("div");
+    head.className = "t";
+    head.textContent = this.o.xFmt(snapped);
+    this.tip.appendChild(head);
+    this.series.forEach((s, k) => {
+      const row = document.createElement("div");
+      row.className = "row";
+      const key = span("k", "");
+      key.style.background = "var(" + s.css + ")";
+      row.append(key, span("n", s.name), span("v", hits[k][1].toFixed(this.o.tipDigits) + (this.o.unit ? " " + this.o.unit : "")));
+      this.tip.appendChild(row);
+    });
+    this.tip.dataset.on = "1";
+
+    const rect = this.svg.getBoundingClientRect();
+    const sc = rect.width / this.w || 1;
+    const tw = this.tip.offsetWidth, px = x * sc;
+    const left = px + 14 + tw > rect.width ? px - 14 - tw : px + 14;
+    this.tip.style.left = Math.max(0, left) + "px";
+    this.tip.style.top = this.m.t * sc + "px";
+  }
+
+  hide() {
+    this.at = null;
+    this.idx = -1;
+    if (this.cross) this.cross.setAttribute("opacity", 0);
+    this.tip.dataset.on = "0";
+  }
+}
+
+// 절사평균 점그래프 — 시료마다 최소–최대 범위선 위에 절사평균 점
+class DotPlot {
+  constructor(svgId, tipId, stats) {
+    this.svg = document.getElementById(svgId);
+    this.tip = document.getElementById(tipId);
+    this.stats = stats;
+    let lo = Infinity, hi = -Infinity;
+    for (const d of stats) { lo = Math.min(lo, d.lo); hi = Math.max(hi, d.hi); }
+    this.x = niceAxis(lo, hi, 0.06);
+    this.hot = -1;
+    this.svg.setAttribute("tabindex", "0");
+
+    const move = ev => {
+      const r = this.svg.getBoundingClientRect();
+      if (!r.width) return;
+      const y = (ev.clientY - r.top) * (this.h / r.height);
+      this.focus(Math.max(0, Math.min(stats.length - 1, Math.floor((y - this.m.t) / this.band))));
+    };
+    this.svg.addEventListener("pointermove", move);
+    this.svg.addEventListener("pointerdown", move);
+    this.svg.addEventListener("pointerleave", () => this.blur());
+    this.svg.addEventListener("blur", () => this.blur());
+    this.svg.addEventListener("keydown", ev => {
+      let d = 0;
+      if (ev.key === "ArrowDown") d = 1;
+      else if (ev.key === "ArrowUp") d = -1;
+      else if (ev.key === "Escape") { this.blur(); return; }
+      else return;
+      ev.preventDefault();
+      this.focus(Math.max(0, Math.min(stats.length - 1, (this.hot < 0 ? -1 : this.hot) + d)));
+    });
+
+    new ResizeObserver(() => this.render()).observe(this.svg.parentNode);
+    this.render();
+  }
+
+  render() {
+    const box = this.svg.parentNode.getBoundingClientRect();
+    if (!box.width) return;
+    const w = Math.round(box.width);
+    if (w === this.w) return;
+    const narrow = w < 560;
+    const band = narrow ? 38 : 44;
+    const m = { l: narrow ? 92 : 116, r: narrow ? 46 : 56, t: 10, b: 30 };
+    const h = m.t + band * this.stats.length + m.b;
+    Object.assign(this, { w, h, m, band, pw: w - m.l - m.r, narrow });
+
+    this.svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    this.svg.setAttribute("width", w);
+    this.svg.setAttribute("height", h);
+    this.svg.replaceChildren();
+
+    const X = v => m.l + (v - this.x.lo) / (this.x.hi - this.x.lo) * this.pw;
+    this.X = X;
+    const fs = narrow ? 10 : 11;
+    const tickCss = "font-family:var(--mono);font-size:" + fs + "px;fill:var(--muted)";
+    const plotH = band * this.stats.length;
+
+    for (const v of this.x.ticks) {
+      this.svg.appendChild(el("line", { x1: X(v), x2: X(v), y1: m.t, y2: m.t + plotH, stroke: "var(--grid)", "stroke-width": 1, "shape-rendering": "crispEdges" }));
+      const tx = el("text", { x: X(v), y: m.t + plotH + 18, "text-anchor": "middle", style: tickCss });
+      tx.textContent = trimNum(v);
+      this.svg.appendChild(tx);
+    }
+    const unit = el("text", { x: m.l + this.pw, y: m.t + plotH + 18, "text-anchor": "end", style: tickCss });
+    unit.textContent = "pH";
+    this.svg.appendChild(unit);
+
+    // 중성선 pH 7
+    if (7 > this.x.lo && 7 < this.x.hi) {
+      this.svg.appendChild(el("line", { x1: X(7), x2: X(7), y1: m.t, y2: m.t + plotH, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" }));
+      const nl = el("text", { x: X(7), y: m.t - 1, "text-anchor": "middle", style: "font-family:var(--mono);font-size:" + (fs - 1) + "px;fill:var(--muted)" });
+      nl.textContent = "중성 7";
+      this.svg.appendChild(nl);
+    }
+
+    this.rows = this.stats.map((d, i) => {
+      const cy = m.t + band * i + band / 2;
+      const g = el("g", {});
+      g.appendChild(el("line", { x1: X(d.lo), x2: X(d.hi), y1: cy, y2: cy, stroke: "var(" + d.s.css + ")", "stroke-width": 2, opacity: 0.32, "stroke-linecap": "round" }));
+      for (const v of [d.lo, d.hi]) g.appendChild(el("line", { x1: X(v), x2: X(v), y1: cy - 5, y2: cy + 5, stroke: "var(" + d.s.css + ")", "stroke-width": 2, opacity: 0.32 }));
+      g.appendChild(el("circle", { cx: X(d.trim), cy, r: 5.5, fill: "var(" + d.s.css + ")", stroke: "var(--surface)", "stroke-width": 2 }));
+
+      const nm = el("text", { x: m.l - 12, y: cy + 4, "text-anchor": "end", style: "font-family:var(--sans);font-size:" + (narrow ? 11 : 12.5) + "px;font-weight:550;fill:var(--ink)" });
+      nm.textContent = d.s.name;
+      g.appendChild(nm);
+
+      const lb = el("text", { x: X(d.hi) + 10, y: cy + 4, style: "font-family:var(--mono);font-size:" + fs + "px;font-weight:620;fill:var(--ink)" });
+      lb.textContent = d.trim.toFixed(2);
+      g.appendChild(lb);
+
+      this.svg.appendChild(g);
+      return g;
+    });
+
+    this.hit = el("rect", { x: 0, y: m.t, width: w, height: plotH, fill: "transparent" });
+    this.svg.appendChild(this.hit);
+    if (this.hot >= 0) this.focus(this.hot);
+  }
+
+  focus(i) {
+    if (!this.rows) return;
+    this.hot = i;
+    this.rows.forEach((g, k) => g.setAttribute("opacity", k === i ? 1 : 0.45));
+    const d = this.stats[i];
+    this.tip.replaceChildren();
+    const head = document.createElement("div");
+    head.className = "t";
+    head.textContent = d.s.name + " · n=" + d.n;
+    this.tip.appendChild(head);
+    const rows = [
+      ["절사평균 10%", d.trim.toFixed(4)],
+      ["평균", d.mean.toFixed(4)],
+      ["중앙값", d.med.toFixed(4)],
+      ["최소–최대", d.lo.toFixed(3) + " – " + d.hi.toFixed(3)]
+    ];
+    for (const [n, v] of rows) {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.append(span("n", n), span("v", v));
+      this.tip.appendChild(row);
+    }
+    this.tip.dataset.on = "1";
+
+    const rect = this.svg.getBoundingClientRect();
+    const sc = rect.width / this.w || 1;
+    const cy = (this.m.t + this.band * i + this.band / 2) * sc;
+    const tw = this.tip.offsetWidth;
+    const px = this.X(d.trim) * sc;
+    const left = px + 16 + tw > rect.width ? px - 16 - tw : px + 16;
+    this.tip.style.left = Math.max(0, left) + "px";
+    this.tip.style.top = Math.max(0, cy - this.tip.offsetHeight / 2) + "px";
+  }
+
+  blur() {
+    this.hot = -1;
+    if (this.rows) this.rows.forEach(g => g.setAttribute("opacity", 1));
+    this.tip.dataset.on = "0";
+  }
+}
+
+function deltaChips(ulId, series, fmt) {
+  const ul = document.getElementById(ulId);
+  for (const s of series) {
+    const li = document.createElement("li");
+    const k = span("k", "");
+    k.style.background = "var(" + s.css + ")";
+    li.append(k, span("name", s.name));
+    for (const node of fmt(s)) li.append(node);
+    ul.appendChild(li);
+  }
+}
+
+function tempTable(id, rows, defs) {
+  const t = document.getElementById(id);
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  for (const h of ["시각"].concat(defs.map(s => s.name + " (" + s.id + ")"))) {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = h;
+    hr.appendChild(th);
+  }
+  thead.appendChild(hr);
+  const tb = document.createElement("tbody");
+  for (const r of rows) {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.style.fontWeight = "400";
+    th.style.color = "var(--muted)";
+    th.textContent = mmss(r[0]);
+    tr.appendChild(th);
+    for (const s of defs) {
+      const td = document.createElement("td");
+      td.textContent = trimNum(r[s.i]);
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+  t.append(thead, tb);
+}
+
+function statTable(id, stats) {
+  const t = document.getElementById(id);
+  const cols = ["시료", "n", "절사평균 10%", "평균", "중앙값", "최소", "최대", "기록"];
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  cols.forEach((h, i) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    if (i === 2) th.className = "strong";
+    th.textContent = h;
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  const tb = document.createElement("tbody");
+  for (const d of stats) {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.className = "name-cell";
+    const sw = span("swatch", "");
+    sw.style.background = "var(" + d.s.css + ")";
+    th.append(sw, document.createTextNode(d.s.name));
+    if (d.s.control) th.append(span("id", " 대조군"));
+    tr.appendChild(th);
+    const cells = [
+      [String(d.n), ""],
+      [d.trim.toFixed(4), "strong"],
+      [d.mean.toFixed(4), ""],
+      [d.med.toFixed(4), ""],
+      [d.lo.toFixed(4), ""],
+      [d.hi.toFixed(4), ""],
+      [d.span + "s", ""]
+    ];
+    for (const [v, cls] of cells) {
+      const td = document.createElement("td");
+      if (cls) td.className = cls;
+      td.textContent = v;
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+  t.append(thead, tb);
+}
+
+function phTable(id, series) {
+  const t = document.getElementById(id);
+  const maxLen = Math.max.apply(null, series.map(s => s.pts.length));
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  const first = document.createElement("th");
+  first.scope = "col";
+  first.textContent = "#";
+  hr.appendChild(first);
+  for (const s of series) {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = s.name;
+    hr.appendChild(th);
+  }
+  thead.appendChild(hr);
+  const tb = document.createElement("tbody");
+  for (let i = 0; i < maxLen; i++) {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.style.fontWeight = "400";
+    th.style.color = "var(--muted)";
+    th.textContent = String(i + 1);
+    tr.appendChild(th);
+    for (const s of series) {
+      const td = document.createElement("td");
+      td.textContent = s.pts[i] ? s.pts[i][0] + "s  " + s.pts[i][1].toFixed(4) : "";
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+  t.append(thead, tb);
+}
+
+// ── 렌더
+const tempFmt = s => {
+  const a = s.pts[0][1], z = s.pts[s.pts.length - 1][1], d = z - a;
+  const b = document.createElement("b");
+  b.textContent = (d > 0 ? "+" : d < 0 ? "−" : "±") + Math.abs(d).toFixed(2) + " °C";
+  return [span("id", s.control ? s.id + " · 대조군" : s.id), b, span("", a.toFixed(1) + " → " + z.toFixed(1))];
+};
+deltaChips("d-evap", S_EVAP, tempFmt);
+deltaChips("d-rxn", S_RXN, tempFmt);
+deltaChips("d-ph", PH_STAT.map(d => d.s), s => {
+  const d = PH_STAT.find(x => x.s === s);
+  const b = document.createElement("b");
+  b.textContent = "pH " + d.trim.toFixed(2);
+  const out = [b, span("", d.lo.toFixed(2) + " – " + d.hi.toFixed(2))];
+  return s.control ? [span("id", "대조군")].concat(out) : out;
+});
+
+tempTable("t-evap", EVAP, D_EVAP);
+tempTable("t-rxn", RXN, D_RXN);
+statTable("t-ph-stat", PH_STAT);
+phTable("t-ph", S_PH);
+
+const CHARTS = {
+  "page-1": [new LineChart("svg-evap", "tip-evap", S_EVAP, { unit: "°C", endDigits: 1, tipDigits: 4 })],
+  "page-2": [new LineChart("svg-rxn", "tip-rxn", S_RXN, { unit: "°C", endDigits: 1, tipDigits: 4 })],
+  "page-3": [
+    new DotPlot("svg-ph-dot", "tip-ph-dot", PH_STAT),
+    new LineChart("svg-ph", "tip-ph", S_PH, { unit: "pH", xFmt: secs, xStep: 5, endDigits: 2, tipDigits: 3 })
+  ]
+};
+
+const tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+function activate(i, focus) {
+  tabs.forEach((tab, k) => {
+    const on = k === i;
+    tab.setAttribute("aria-selected", on ? "true" : "false");
+    tab.tabIndex = on ? 0 : -1;
+    const panel = document.getElementById(tab.getAttribute("aria-controls"));
+    panel.hidden = !on;
+    if (on) for (const c of CHARTS[panel.id]) c.render();
+  });
+  if (focus) tabs[i].focus();
+}
+tabs.forEach((tab, i) => {
+  tab.addEventListener("click", () => activate(i, false));
+  tab.addEventListener("keydown", ev => {
+    let d = 0;
+    if (ev.key === "ArrowRight") d = 1;
+    else if (ev.key === "ArrowLeft") d = -1;
+    else if (ev.key === "Home") { ev.preventDefault(); activate(0, true); return; }
+    else if (ev.key === "End") { ev.preventDefault(); activate(tabs.length - 1, true); return; }
+    else return;
+    ev.preventDefault();
+    activate((i + d + tabs.length) % tabs.length, true);
+  });
+});
+</script>
+
+</body>
+</html>
