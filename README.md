@@ -2,8 +2,8 @@
 
 온도·pH 로거로 받은 실험 원자료와 그 시각화.
 
-**그래프 →** <https://research.trh.kr/sshs-graph/graph.html>
-· 프로젝트 페이지 <https://research.trh.kr/sshs-graph/>
+**그래프 →** <https://lab.trh.kr/sshs-graph/graph.html>
+· 프로젝트 페이지 <https://lab.trh.kr/sshs-graph/>
 
 ```
 data/01-evaporation/   액체의 증발 — 온도 3채널
