@@ -3,45 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
 <meta name="description" content="액체의 증발, 흡열·발열 반응, pH 절사평균, 중화 반응 — 측정 기록 4부">
 <title>액체의 증발 · 흡열/발열 · pH — 측정 기록</title>
+<link rel="stylesheet" href="https://trh.kr/fonts/fonts.css">
 <style>
 :root {
-  color-scheme: light;
-  --plane:      #f9f9f7;
-  --surface:    #fcfcfb;
-  --ink:        #0b0b0b;
-  --ink-2:      #52514e;
-  --muted:      #898781;
-  --grid:       #e1e0d9;
-  --axis:       #c3c2b7;
-  --hair:       rgba(11,11,11,0.10);
-  --wash:       rgba(11,11,11,0.045);
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
-  --s4: #eda100; --s5: #e87ba4; --s6: #008300;
-  --sans: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --plane: #0d0d0d; --surface: #1a1a19;
-    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --axis: #383835;
-    --hair: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
-    --s4: #c98500; --s5: #d55181; --s6: #008300;
-  }
-}
-:root[data-theme="dark"] {
   color-scheme: dark;
-  --plane: #0d0d0d; --surface: #1a1a19;
-  --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-  --grid: #2c2c2a; --axis: #383835;
-  --hair: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+  /* Th. 패밀리 정본 토큰(trh-home tokens.css) — 다크 전용. 차트 크롬은 여기서 온다. */
+  --plane:   #0f1113;   /* 페이지 배경 = Th. --bg */
+  --surface: #17191c;   /* 카드 = Th. --surface */
+  --ink:     #e8eaed;   /* 본문 = Th. --text */
+  --ink-2:   #9aa1a9;   /* 보조 = Th. --dim */
+  --muted:   #7d838b;   /* 축 라벨 */
+  --grid:    #25282c;   /* 격자 = Th. --line */
+  --axis:    #3a3f46;   /* 축선 */
+  --hair:    rgba(255,255,255,0.09);
+  --wash:    rgba(255,255,255,0.05);
+  --accent:  #4a9bff;   /* 인터랙션(탭·포커스) = Th. --accent */
+  --radius:  14px;
+  /* 데이터 계열 색 — CVD 안전 검증본(다크). 크롬과 별개로 값을 인코딩한다. */
   --s1: #3987e5; --s2: #d95926; --s3: #199e70;
-  --s4: #c98500; --s5: #d55181; --s6: #008300;
+  --s4: #c98500; --s5: #d55181; --s6: #4a9bff;
+  --sans: "Inter", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
 }
 
 body {
@@ -49,7 +34,7 @@ body {
   background: var(--plane);
   color: var(--ink);
   font-family: var(--sans);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-text-size-adjust: 100%;
 }
 .wrap {
@@ -69,8 +54,8 @@ body {
 }
 h1 {
   font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
-  font-weight: 620;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   text-wrap: balance;
   margin: 0.35rem 0 0;
 }
@@ -108,16 +93,16 @@ h3 { font-size: 0.9375rem; font-weight: 600; margin: 0; }
 }
 .pager button .no { font-family: var(--mono); font-size: 0.6875rem; }
 .pager button:hover { color: var(--ink-2); background: var(--wash); }
-.pager button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--s1); font-weight: 560; }
-.pager button:focus-visible { outline: 2px solid var(--s1); outline-offset: -2px; }
+.pager button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 560; }
+.pager button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 [role="tabpanel"] { display: flex; flex-direction: column; gap: 1.25rem; }
 [role="tabpanel"][hidden] { display: none; }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--hair);
-  border-radius: 3px;
-  padding: 1.25rem 1.25rem 1rem;
+  border-radius: var(--radius);
+  padding: 1.35rem 1.35rem 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -145,7 +130,7 @@ h3 { font-size: 0.9375rem; font-weight: 600; margin: 0; }
 
 figure { margin: 0; position: relative; }
 svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
-svg:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
+svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .tip {
   position: absolute;
   z-index: 2;
@@ -170,7 +155,7 @@ svg:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
 
 details { border-top: 1px solid var(--hair); padding-top: 0.75rem; }
 summary { cursor: pointer; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--ink-2); }
-summary:focus-visible { outline: 2px solid var(--s1); outline-offset: 3px; }
+summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .tbl { max-height: 22rem; overflow: auto; margin-top: 0.75rem; border: 1px solid var(--hair); }
 .tbl--flat { max-height: none; }
 table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
@@ -197,15 +182,29 @@ td.strong, th.strong { color: var(--ink); font-weight: 620; }
 .ctl input { width: 5.5rem; font-family: var(--mono); font-size: 0.8125rem;
   background: var(--plane); color: var(--ink); border: 1px solid var(--hair);
   border-radius: 3px; padding: 0.3rem 0.45rem; font-variant-numeric: tabular-nums; }
-.ctl input:focus-visible { outline: 2px solid var(--s1); outline-offset: 1px; }
+.ctl input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .ctl span { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; }
 .ctl button { font: inherit; font-size: 0.75rem; font-family: var(--mono); cursor: pointer;
   background: none; color: var(--ink-2); border: 1px solid var(--hair);
   border-radius: 3px; padding: 0.3rem 0.6rem; }
 .ctl button:hover { border-color: var(--s1); color: var(--ink); }
-.ctl button:focus-visible { outline: 2px solid var(--s1); outline-offset: 1px; }
+.ctl button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 footer { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
-@media (prefers-reduced-motion: reduce) { .tip { transition: none; } }
+/* 진입 애니메이션 — 카드가 아래에서 살짝 올라오며 나타난다. 데이터가 자리를 잡는 느낌. */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.card { animation: rise .5s cubic-bezier(.22,.61,.36,1) both; }
+[role="tabpanel"] .card:nth-child(2) { animation-delay: .06s; }
+[role="tabpanel"] .card:nth-child(3) { animation-delay: .12s; }
+[role="tabpanel"] .card:nth-child(4) { animation-delay: .18s; }
+.masthead { animation: rise .5s cubic-bezier(.22,.61,.36,1) both; }
+.pager { animation: rise .5s .04s cubic-bezier(.22,.61,.36,1) both; }
+/* 선 그리기 — 각 계열이 왼쪽에서 오른쪽으로 그어진다(JS 가 path 길이를 넣어준다). */
+path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
+@media (prefers-reduced-motion: reduce) {
+  .tip { transition: none; }
+  .card, .masthead, .pager { animation: none; }
+  path.series { transition: none; stroke-dashoffset: 0 !important; }
+}
 </style>
 </head>
 <body>
@@ -557,11 +556,22 @@ class LineChart {
       this.svg.appendChild(ml);
     }
 
+    const canAnim = typeof window !== "undefined" && typeof requestAnimationFrame !== "undefined";
+    const reduce = canAnim && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     for (const s of this.series) {
       let d = "";
       for (let i = 0; i < s.pts.length; i++) d += (i ? "L" : "M") + X(s.pts[i][0]).toFixed(2) + " " + Y(s.pts[i][1]).toFixed(2);
-      this.svg.appendChild(el("path", { d, fill: "none", stroke: "var(" + s.css + ")", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      const path = el("path", { class: "series", d, fill: "none", stroke: "var(" + s.css + ")", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+      this.svg.appendChild(path);
+      // 첫 렌더에서만 선을 그어 보인다. 리사이즈 재렌더에는 애니 없음.
+      if (canAnim && !this._drawn && !reduce && path.getTotalLength) {
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        requestAnimationFrame(() => requestAnimationFrame(() => { path.style.strokeDashoffset = "0"; }));
+      }
     }
+    this._drawn = true;
 
     // 끝점 직접 라벨 — 겹치면 위아래로 밀어 붙인다
     const ends = this.series.map(s => {
