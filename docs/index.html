@@ -198,12 +198,11 @@ footer { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
 [role="tabpanel"] .card:nth-child(4) { animation-delay: .18s; }
 .masthead { animation: rise .5s cubic-bezier(.22,.61,.36,1) both; }
 .pager { animation: rise .5s .04s cubic-bezier(.22,.61,.36,1) both; }
-/* 선 그리기 — 각 계열이 왼쪽에서 오른쪽으로 그어진다(JS 가 path 길이를 넣어준다). */
-path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
+/* 선 그리기는 Web Animations API 로 처리한다(JS render). CSS transition 은
+   이 엔진에서 stroke-dashoffset 보간이 안 걸려 쓰지 않는다. */
 @media (prefers-reduced-motion: reduce) {
   .tip { transition: none; }
   .card, .masthead, .pager { animation: none; }
-  path.series { transition: none; stroke-dashoffset: 0 !important; }
 }
 </style>
 </head>
@@ -231,7 +230,7 @@ path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
       <header>
         <div class="eyebrow">실험 1</div>
         <h2>액체의 증발</h2>
-        <p class="note">대조군인 물과 아세톤 · 에탄올을 같은 조건에 두고 2분 동안 온도를 쟀습니다. 세 채널 모두 26 °C 부근에서 출발하지만, 증발이 빠를수록 크게 식습니다 — 아세톤, 에탄올, 물 순입니다. 아세톤은 기록이 끝나는 2:09까지도 계속 내려가는 중이라 최저점은 그래프 바깥에 있습니다.</p>
+        <p class="note">증발이 빠를수록 크게 식습니다. 물(대조군) −0.8, 에탄올 −4.0, 아세톤 −15.1 °C.</p>
       </header>
       <ul class="deltas" id="d-evap"></ul>
       <figure>
@@ -250,7 +249,7 @@ path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
       <header>
         <div class="eyebrow">실험 2</div>
         <h2>흡열 반응과 발열 반응</h2>
-        <p class="note">대조군인 물은 114행 전부 26.0 °C로, 값이 한 번도 바뀌지 않았습니다. 염화칼슘 쪽은 열이 나 1:25에 37.88 °C로 정점을 찍고 이후 완만히 식습니다 — 0:36에서 0:41 사이 한 번 눌렸다가 다시 오릅니다. 질산암모늄 쪽은 열을 빼앗겨 1:13에 20.19 °C까지 내려간 뒤 조금 되올라옵니다.</p>
+        <p class="note">염화칼슘은 열을 내(+11.7 °C), 질산암모늄은 열을 흡수합니다(−5.6 °C). 물(대조군)은 26.0 °C 고정.</p>
       </header>
       <ul class="deltas" id="d-rxn"></ul>
       <figure>
@@ -269,7 +268,7 @@ path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
       <header>
         <div class="eyebrow">실험 3 · 절사평균</div>
         <h2>시료 6종의 pH</h2>
-        <p class="note">전극을 담근 직후에는 값이 크게 출렁이다가 차차 자리를 잡습니다. 그 앞뒤 튀는 구간을 빼기 위해 <b>정렬한 측정값의 양 끝에서 각각 10%씩 버리고 남은 80%로 평균</b>을 낸 값이 절사평균입니다. 아래 점이 절사평균, 가로선이 그 시료에서 관측된 최소–최대 범위입니다. 대조군인 물이 맨 위, 나머지는 pH가 낮은 순입니다.</p>
+        <p class="note">점은 절사평균(양 끝 10%씩 버린 평균), 가로선은 최소–최대 범위입니다. 물이 대조군.</p>
       </header>
       <figure>
         <svg id="svg-ph-dot" role="img" aria-label="시료 6종의 pH 절사평균 점그래프 — 대조군 물이 첫 행, 최소부터 최대까지 범위와 함께 표시"></svg>
@@ -281,7 +280,7 @@ path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
     <section class="card">
       <header>
         <h3>측정 원값 — 시간에 따른 pH</h3>
-        <p class="note">절사평균이 왜 필요한지가 여기서 보입니다. 레몬즙 · 오렌지주스 · 물은 첫 몇 초 동안만 값이 크게 흔들리고, 포카리스웨트 · 탄산수소나트륨은 처음부터 평평합니다. 세제는 28초 내내 한 방향으로 계속 올라가 아직 자리를 잡지 못했습니다.</p>
+        <p class="note">시료별 원측정값입니다. 세제는 28초 내내 올라가 아직 안정되지 않았습니다.</p>
       </header>
       <ul class="deltas" id="d-ph"></ul>
       <figure>
@@ -297,60 +296,22 @@ path.series { transition: stroke-dashoffset .9s cubic-bezier(.4,0,.2,1); }
 
 
   <div role="tabpanel" id="page-4" aria-labelledby="tab-4" hidden>
-    <section class="card alert">
-      <header>
-        <div class="eyebrow">실험 4 · 먼저 읽을 것</div>
-        <h2>기록된 pH 열은 쓸 수 없습니다</h2>
-        <p class="note">CSV 의 <code>pH(A0)</code> 는 <b>−111.04 에서 −56.54</b> 사이입니다. pH 는 이런 값을 가질 수 없습니다.
-        원인은 센서가 아니라 <b>변환식</b>이고, 같은 파일의 <code>sensor(V)</code> 열은 멀쩡합니다 — 그래서 되살릴 수 있습니다.</p>
-      </header>
-      <ul class="deltas" id="d-neut"></ul>
-      <div class="src">
-        <div class="src-h">main.py · 457행</div>
-        <pre><code>sensor_2_value = <b>-72.78</b> * average_v + <b>49.567</b></code></pre>
-      </div>
-      <p class="note">이 식의 기울기는 <b>13.74 mV/pH</b> 입니다. 실제 pH 전극은 네른스트 식에 따라 29.3 °C 에서
-      <b>60.01 mV/pH</b> 를 냅니다 — 기록된 식이 <b>4.37배</b> 가파릅니다. 두 점 보정(pH 4·7 완충액)을 하실 때 전극이
-      안정되기 전에 읽으셨거나, 두 완충액의 전압차를 41 mV 로 잘못 잡으면 이 값이 나옵니다.
-      측정 전체 전압 폭 0.7488 V 를 이 식에 넣으면 pH 가 54.5 단위 움직인 셈이 되는데, pH 눈금 자체가 0~14 입니다.</p>
-    </section>
-
     <section class="card">
       <header>
-        <h3>되살린 pH — 추정</h3>
-        <p class="note">전압에서 pH 를 다시 계산했습니다. 가정은 두 가지뿐입니다. ① 기울기는 측정 온도의 네른스트 값
-        ② 곡선이 가장 가파른 순간(<b>08:05</b>)이 당량점 pH 7 — 강산·강염기 중화의 당량점은 7 입니다.
-        결과가 <b>pH 1.60 → 7.00 → 14.04</b>, 폭 12.48 로 강산·강염기 적정 곡선의 전형적인 모양과 맞습니다. 끝값이 14 를 살짝 넘는 것은 이 보정이 어디까지나 추정이라는 뜻입니다.
-        완충액 실측값이 있으시면 아래 두 칸에 넣어 바로잡으실 수 있습니다.</p>
+        <div class="eyebrow">실험 4</div>
+        <h2>중화 반응</h2>
+        <p class="note">기록된 pH가 못 쓸 값이라, 당량점(08:05)을 7로 놓고 되살렸습니다. pH 1.6 → 7 → 14.</p>
       </header>
-      <div class="ctl">
-        <label>기울기 <input id="c-slope" type="number" step="0.01" min="1" max="200" value="60.01"> <span>mV/pH</span></label>
-        <label>당량점 pH <input id="c-anchor" type="number" step="0.01" min="0" max="14" value="7.00"></label>
-        <button type="button" id="c-reset">되돌리기</button>
-      </div>
       <figure>
-        <svg id="svg-ph2" role="img" aria-label="중화 반응 — 전압에서 되살린 pH 의 시간에 따른 변화 꺾은선그래프, 당량점 표시"></svg>
+        <svg id="svg-ph2" role="img" aria-label="중화 반응 — 되살린 pH 의 시간에 따른 변화 꺾은선그래프, 당량점 표시"></svg>
         <div class="tip" id="tip-ph2" role="status"></div>
       </figure>
     </section>
 
     <section class="card">
       <header>
-        <h3>센서 전압 — 원측정</h3>
-        <p class="note">변환을 거치지 않은 값입니다. 이 그래프만이 실제로 측정된 것이고, 위의 pH 는 여기서 나옵니다.
-        08:02 부터 08:13 까지 11초 사이에 0.5210 V 가 떨어집니다. 전체 변화폭의 70% 가 이 11초에 몰려 있습니다.</p>
-      </header>
-      <figure>
-        <svg id="svg-volt" role="img" aria-label="중화 반응 — 센서 전압의 시간에 따른 변화 꺾은선그래프, 당량점 표시"></svg>
-        <div class="tip" id="tip-volt" role="status"></div>
-      </figure>
-    </section>
-
-    <section class="card">
-      <header>
-        <h3>온도 — 중화열</h3>
-        <p class="note">25.56 에서 <b>29.38 °C</b> 까지 3.81 °C 오릅니다. 최고점이 08:08 로 당량점(08:05)과 3초 차이입니다 —
-        중화가 가장 활발한 순간에 열이 가장 많이 납니다. 첫 행 30.6875 °C 는 센서가 자리잡기 전 값이라 뺐습니다.</p>
+        <h3>온도</h3>
+        <p class="note">08:08에 최고 29.4 °C — 당량점 즈음 중화열입니다.</p>
       </header>
       <figure>
         <svg id="svg-temp2" role="img" aria-label="중화 반응 — 온도의 시간에 따른 변화 꺾은선그래프, 당량점 표시"></svg>
@@ -556,19 +517,24 @@ class LineChart {
       this.svg.appendChild(ml);
     }
 
-    const canAnim = typeof window !== "undefined" && typeof requestAnimationFrame !== "undefined";
+    const canAnim = typeof window !== "undefined";
     const reduce = canAnim && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const doDraw = canAnim && !this._drawn && !reduce;
+    let di = 0;
     for (const s of this.series) {
       let d = "";
       for (let i = 0; i < s.pts.length; i++) d += (i ? "L" : "M") + X(s.pts[i][0]).toFixed(2) + " " + Y(s.pts[i][1]).toFixed(2);
       const path = el("path", { class: "series", d, fill: "none", stroke: "var(" + s.css + ")", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
       this.svg.appendChild(path);
-      // 첫 렌더에서만 선을 그어 보인다. 리사이즈 재렌더에는 애니 없음.
-      if (canAnim && !this._drawn && !reduce && path.getTotalLength) {
+      // 첫 렌더에서만 선을 그어 보인다. WAAPI 로 계열별 90ms 스태거. (리사이즈 재렌더엔 애니 없음)
+      if (doDraw && path.getTotalLength && path.animate) {
         const len = path.getTotalLength();
         path.style.strokeDasharray = len;
-        path.style.strokeDashoffset = len;
-        requestAnimationFrame(() => requestAnimationFrame(() => { path.style.strokeDashoffset = "0"; }));
+        path.animate(
+          [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+          { duration: 850, delay: di * 90, easing: "cubic-bezier(.4,0,.2,1)", fill: "backwards" }
+        );
+        di++;
       }
     }
     this._drawn = true;
@@ -963,30 +929,11 @@ const phSeries = (slope, anchor) => [{
   id: "A0", name: "되살린 pH", css: "--s1",
   pts: neutRows.map(r => [r[0], toPH(r[2], slope, anchor)])
 }];
-const voltSeries = [{ id: "A0", name: "센서 전압", css: "--s3",
-  pts: neutRows.map(r => [r[0], r[2]]) }];
 const tempSeries = [{ id: "D16", name: "온도", css: "--s2",
   pts: neutRows.map(r => [r[0], r[1]]) }];
 
 const neutOpts = { xFmt: mmss, xStep: 120, marks: NEUT_MARK };
 
-deltaChips("d-neut", [
-  { name: "기록된 pH", css: "--s2", bad: true },
-  { name: "센서 전압", css: "--s3" },
-  { name: "온도 상승", css: "--s2" }
-], s => {
-  const b = document.createElement("b");
-  if (s.name === "기록된 pH") {
-    b.textContent = "−110.97 → −56.61";
-    return [span("id", "불가능"), b, span("", "pH 눈금 0–14")];
-  }
-  if (s.name === "센서 전압") {
-    b.textContent = "2.2058 → 1.4589 V";
-    return [span("id", "정상"), b, span("", "폭 0.7488 V")];
-  }
-  b.textContent = "+3.81 °C";
-  return [span("id", "중화열"), b, span("", "25.56 → 29.38")];
-});
 
 // 표 — 시각 · 온도 · 전압 · 기록 pH · 되살린 pH
 (function () {
@@ -1022,27 +969,9 @@ deltaChips("d-neut", [
 
 const chartPH2 = new LineChart("svg-ph2", "tip-ph2", phSeries(NEUT_SLOPE, NEUT_ANCHOR),
   Object.assign({ unit: "pH", endDigits: 2, tipDigits: 2 }, neutOpts));
-const chartVolt = new LineChart("svg-volt", "tip-volt", voltSeries,
-  Object.assign({ unit: "V", endDigits: 2, tipDigits: 6 }, neutOpts));
 const chartTemp2 = new LineChart("svg-temp2", "tip-temp2", tempSeries,
   Object.assign({ unit: "°C", endDigits: 1, tipDigits: 4 }, neutOpts));
 
-(function () {
-  const slopeEl = document.getElementById("c-slope");
-  const anchorEl = document.getElementById("c-anchor");
-  const apply = () => {
-    const sl = parseFloat(slopeEl.value), an = parseFloat(anchorEl.value);
-    if (!isFinite(sl) || sl <= 0 || !isFinite(an)) return;
-    chartPH2.setSeries(phSeries(sl, an));
-  };
-  slopeEl.addEventListener("input", apply);
-  anchorEl.addEventListener("input", apply);
-  document.getElementById("c-reset").addEventListener("click", () => {
-    slopeEl.value = NEUT_SLOPE;
-    anchorEl.value = NEUT_ANCHOR.toFixed(2);
-    apply();
-  });
-})();
 
 const CHARTS = {
   "page-1": [new LineChart("svg-evap", "tip-evap", S_EVAP, { unit: "°C", endDigits: 1, tipDigits: 4 })],
@@ -1051,7 +980,7 @@ const CHARTS = {
     new DotPlot("svg-ph-dot", "tip-ph-dot", PH_STAT),
     new LineChart("svg-ph", "tip-ph", S_PH, { unit: "pH", xFmt: secs, xStep: 5, endDigits: 2, tipDigits: 3 })
   ],
-  "page-4": [chartPH2, chartVolt, chartTemp2]
+  "page-4": [chartPH2, chartTemp2]
 };
 
 const tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
